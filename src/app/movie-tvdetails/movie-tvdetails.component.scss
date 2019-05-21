@@ -1,0 +1,50 @@
+$header-font-color: #ffffff;
+
+.header {
+  width: 100%;
+  position: relative;
+  z-index: 1;
+
+  color: $header-font-color;
+
+  .title, .subtitle {
+    color: $header-font-color;
+  }
+
+  &::before {
+    content: '';
+    position: absolute;
+    display: block;
+    height: 100%;
+    width: 100%;
+    left: 0;
+    right: 0;
+    z-index: -1;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: 50% 0%;
+    background-image: var(--backdrop-image);
+
+    filter: contrast(130%);
+  }
+}
+
+.overlay {
+  position: absolute;
+  display: block;
+  height: 100%;
+  width: 100%;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+.poster {
+  display: block;
+  margin: auto;
+  overflow: hidden;
+  border-radius: 4px;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
+  width: 300px;
+  height: 450px;
+}
