@@ -4,7 +4,7 @@ import { Routes, RouterModule } from "@angular/router";
 import { MovieTVDetailsComponent } from "./movie-tvdetails/movie-tvdetails.component";
 
 const routes: Routes = [
-  { path: "", component: MovieTVDetailsComponent }
+  { path: ":type/:id", component: MovieTVDetailsComponent }
 ];
 
 @NgModule({

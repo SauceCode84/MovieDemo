@@ -5,20 +5,23 @@
       <div class="columns">
         <div class="column is-4 is-centered">
           <div class="poster">
-            <img src="https://image.tmdb.org/t/p/w300_and_h450_bestv2/ooBGRQBdbGzBxAVfExiO8r7kloA.jpg">
+            <img [src]="posterUrl">
           </div>
         </div>
         <div class="column is-8">
-          <h1 class="title is-1 has-text-weight-bold">
-            <span>Title</span>
-            <small>(2004)</small>
+          <h1 class="title is-2 has-text-weight-bold">
+            <span>{{ details.title }}</span>
           </h1>
-          <h2 class="subtitle">
-            Subtitle
+          <h2 class="subtitle is-3">
+            {{ detailYear(details.release_date) }}
           </h2>
           <div class="content">
-            <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Sapiente facilis quasi repellendus officiis at illo laudantium quas, voluptatibus sequi nam tempora earum obcaecati, ipsa repudiandae voluptas ratione nisi accusantium explicabo?</p>
-            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Corporis corrupti animi maxime aperiam aspernatur, impedit est vitae doloribus dolore quaerat possimus, quos modi beatae? Numquam ullam non debitis necessitatibus excepturi.</p>
+            <h3 class="title is-4">Overview</h3>
+            <p>{{ details.overview }}</p>
+            <h3 class="title is-4">Cast</h3>
+            <div class="tags">
+              <a class="tag is-white" *ngFor="let cast of details?.cast" [routerLink]="['/people', cast.id]">{{ cast.name }}</a>
+            </div>
           </div>
         </div>
       </div>

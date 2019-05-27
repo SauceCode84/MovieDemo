@@ -1,9 +1,13 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule } from "@angular/core";
+import { BrowserModule } from "@angular/platform-browser";
+import { HttpClientModule } from "@angular/common/http";
 
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
-import { MovieTVDetailsComponent } from './movie-tvdetails/movie-tvdetails.component';
+import { AppRoutingModule } from "./app-routing.module";
+import { AppComponent } from "./app.component";
+import { MovieTVDetailsComponent } from "./movie-tvdetails/movie-tvdetails.component";
+
+import { MovieService } from "./movie.service";
+import { TVService } from "./tv.service";
 
 @NgModule({
   declarations: [
@@ -12,9 +16,13 @@ import { MovieTVDetailsComponent } from './movie-tvdetails/movie-tvdetails.compo
   ],
   imports: [
     BrowserModule,
+    HttpClientModule,
     AppRoutingModule
   ],
-  providers: [],
+  providers: [
+    MovieService,
+    TVService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
