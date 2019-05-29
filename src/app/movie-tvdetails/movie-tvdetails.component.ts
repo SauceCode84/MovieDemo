@@ -27,58 +27,58 @@ export class MovieTVDetailsComponent implements OnInit, OnDestroy {
     private movieService: MovieService) { }
 
   ngOnInit() {
-    // this.detailsSubscription = this.activatedRoute.params
-    //   .subscribe(async (params: { type?: MovieTVType; id?: string | number; }) => {
-    //     let { type, id } = params;
+    this.detailsSubscription = this.activatedRoute.params
+      .subscribe(async (params: { type?: MovieTVType; id?: string | number; }) => {
+        let { type, id } = params;
 
-    //     switch (type) {
-    //       case "movies":
-    //         let movie = await this.movieService.movieDetails(id);
+        switch (type) {
+          case "movies":
+            let movie = await this.movieService.movieDetails(id);
             
-    //         let credits = await this.movieService.movieCredits(id);
-    //         let cast = credits.cast.slice(0, 5);
+            let credits = await this.movieService.movieCredits(id);
+            let cast = credits.cast.slice(0, 5);
 
-    //         this.details = { ...movie, cast };
-    //         console.log(this.details);
+            this.details = { ...movie, cast };
+            console.log(this.details);
 
-    //       case "tv":
-    //         // call services...
-    //         // ...
-    //     }
-    //   });
+          case "tv":
+            // call services...
+            // ...
+        }
+      });
 
     
-    this.detailsSubscription = this.activatedRoute.params
-      .pipe(
-        switchMap((params: { type?: MovieTVType; id?: string | number; }) => {
-          let { id, type } = params;
+    // this.detailsSubscription = this.activatedRoute.params
+    //   .pipe(
+    //     switchMap((params: { type?: MovieTVType; id?: string | number; }) => {
+    //       let { id, type } = params;
 
-          switch (type) {
-            case "movies":
-              return combineLatest(
-                this.movieService.getMovieDetails(id),
-                this.movieService.getMovieCredits(id)
-              );
+    //       switch (type) {
+    //         case "movies":
+    //           return combineLatest(
+    //             this.movieService.getMovieDetails(id),
+    //             this.movieService.getMovieCredits(id)
+    //           );
 
-            case "tv":
-              // call services...
-              // ...
-          }
-        }),
-        map(([movie, credits]) => {
-          const cast = credits.cast.slice(0, 5);
+    //         case "tv":
+    //           // call services...
+    //           // ...
+    //       }
+    //     }),
+    //     map(([movie, credits]) => {
+    //       const cast = credits.cast.slice(0, 5);
 
-          return { ...movie, cast };
-        })
-      )
-      .subscribe(details => this.details = details);
+    //       return { ...movie, cast };
+    //     })
+    //   )
+    //   .subscribe(details => this.details = details);
 
       /// ASYNC PIPE ///
       // this.details$ = this.activatedRoute.params
   }
 
   ngOnDestroy() {
-    // this.detailsSubscription.unsubscribe();
+    this.detailsSubscription.unsubscribe();
   }
 
   public detailYear(releaseDate: string) {
