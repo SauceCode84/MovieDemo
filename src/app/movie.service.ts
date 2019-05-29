@@ -52,6 +52,8 @@ export class MovieService {
   
   constructor(private http: HttpClient) { }
 
+  /// Observables ///
+
   public getMovieDetails(id: string | number) {
     return this.http.get<Movie>(`https://api.themoviedb.org/3/movie/${ id }`, { params: apiParams });
   }
@@ -78,19 +80,7 @@ export class MovieService {
     return this.http.get<GenreResults>(`https://api.themoviedb.org/3/genre/movie/list`, { params: apiParams });
   }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+  /// Promises ///
 
   public movieDetails(id: string | number) {
     return this.http
