@@ -1,0 +1,97 @@
+<section>
+  <div class="container">
+    <div class="columns">
+      <div class="column is-8 is-offset-2">
+        
+        <section class="section">
+          
+          <div class="field is-horizontal">
+            <div class="field-label is-large">
+              <label class="label">Search</label>
+            </div>
+            <div class="field-body">
+              <div class="field">
+                <div class="control is-expanded has-icons-left">
+                  <input type="text" class="input is-large" placeholder="Find a movie..." [formControl]="searchMovie">
+                  <span class="icon is-left">
+                    <i class="fas fa-search"></i>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+
+          <div class="level">
+            <div class="level-item">
+              <div class="control has-icons-left">
+                <input type="text" class="input" placeholder="Find by year..." [formControl]="searchYear">
+                <span class="icon is-small is-left">
+                  <i class="far fa-calendar"></i>
+                </span>
+              </div>
+            </div>
+          </div>
+
+        </section>
+
+        <ng-container *ngIf="(movieSearchResults$ | async) as movieSearchResults">
+          
+          <ng-container
+            *ngIf="!!movieSearchResults.results.length; then results; else noResults">
+          </ng-container>
+
+          <ng-template #results>
+            <div class="level">
+              <div class="level-left">
+                <h4 class="title is-4">{{ movieSearchResults.total_results }} results...</h4>
+              </div>
+              <div class="level-right">
+                <p class="has-text-weight-bold">Page {{ movieSearchResults.page }} of {{ movieSearchResults.total_pages }}</p>
+              </div>
+            </div>
+
+            <div *ngFor="let movie of movieSearchResults?.results">
+              <div class="columns">
+                <div class="column is-4">
+                  <a [routerLink]="['/movies', movie.id]">
+                    <div class="poster">
+                      <img [src]="movie.poster_path">
+                    </div>
+                  </a>
+                </div>
+                <div class="column is-8">
+                  <div class="content">
+                    <p>
+                      <a [routerLink]="['/movies', movie.id]">
+                        <span class="title is-4">{{ movie.title }}</span>&nbsp;<span class="subtitle is-5">({{ movie.release_date | date:'yyyy' }})</span>
+                      </a>
+                    </p>
+                    <p>{{ movie.overview }}</p>
+                    <div class="tags">
+                      <span class="tag is-primary" *ngFor="let genre of movie.genres">{{ genre.name }}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <hr/>
+            </div>
+          </ng-template>
+          
+          <ng-template #noResults>
+            <div class="hero">
+              <div class="hero-body">
+                <div class="container has-text-centered">
+                  <p class="title is-3 has-text-grey-light">No movie results found...</p>
+                  <p class="subtitle is-4 has-text-grey-light">Try a different movie search</p>
+                </div>
+              </div>
+            </div>
+          </ng-template>
+
+        </ng-container>
+
+      </div>
+    </div>
+  </div>
+</section>

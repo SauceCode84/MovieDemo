@@ -1,11 +1,12 @@
+<!-- <section *ngIf="(details$ | async) as details"> -->
 <section>
-  <div class="header" [attr.style]="backdropStyle">
+  <div class="header" [attr.style]="backdropStyle(details.backdrop_path)">
     <div class="overlay"></div>
     <div class="container">
       <div class="columns">
         <div class="column is-4 is-centered">
           <div class="poster">
-            <img [src]="posterUrl">
+            <img [src]="posterUrl(details.poster_path)">
           </div>
         </div>
         <div class="column is-8">

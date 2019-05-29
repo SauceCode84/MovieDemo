@@ -1,46 +1,69 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, OnDestroy } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { DomSanitizer, SafeStyle } from "@angular/platform-browser";
+import { DomSanitizer } from "@angular/platform-browser";
 
-import { Observable, empty, combineLatest } from "rxjs";
+import { combineLatest, Observable, Subscription } from "rxjs";
 import { switchMap, map } from "rxjs/operators";
 
-import { MovieService, Movie } from "../movie.service";
-import { TVService, TV } from "../tv.service";
+import { MovieService, Movie, MovieCredits } from "../movie.service";
 
-const backdropUrl = "http://image.tmdb.org/t/p/original/nGsNruW3W27V6r4gkyc3iiEGsKR.jpg";
-
-type MovieTVType = "movie" | "tv";
+type MovieTVType = "movies" | "tv";
 
 @Component({
   selector: "movie-tv-details",
   templateUrl: "./movie-tvdetails.component.html",
   styleUrls: ["./movie-tvdetails.component.scss"]
 })
-export class MovieTVDetailsComponent implements OnInit {
-
-  // backdropStyle: SafeStyle;
-  details: any;
-  // details$: Observable<Movie | TV>;
-
+export class MovieTVDetailsComponent implements OnInit, OnDestroy {
+  
+  details: Movie & MovieCredits;
+  detailsSubscription: Subscription;
+  
+  // details$: Observable<Movie & MovieCredits>;
+  
   constructor(
     private activatedRoute: ActivatedRoute,
     private sanitizer: DomSanitizer,
-    private movieService: MovieService,
-    private tvService: TVService) { }
+    private movieService: MovieService) { }
 
   ngOnInit() {
-    
+    // this.detailsSubscription = this.activatedRoute.params
+    //   .subscribe(async (params: { type?: MovieTVType; id?: string | number; }) => {
+    //     let { type, id } = params;
 
-    this.activatedRoute.params
+    //     switch (type) {
+    //       case "movies":
+    //         let movie = await this.movieService.movieDetails(id);
+            
+    //         let credits = await this.movieService.movieCredits(id);
+    //         let cast = credits.cast.slice(0, 5);
+
+    //         this.details = { ...movie, cast };
+    //         console.log(this.details);
+
+    //       case "tv":
+    //         // call services...
+    //         // ...
+    //     }
+    //   });
+
+    
+    this.detailsSubscription = this.activatedRoute.params
       .pipe(
         switchMap((params: { type?: MovieTVType; id?: string | number; }) => {
-          let { id } = params;
+          let { id, type } = params;
 
-          return combineLatest(
-            this.movieService.getMovieDetails(id),
-            this.movieService.getMovieCredits(id)
-          );
+          switch (type) {
+            case "movies":
+              return combineLatest(
+                this.movieService.getMovieDetails(id),
+                this.movieService.getMovieCredits(id)
+              );
+
+            case "tv":
+              // call services...
+              // ...
+          }
         }),
         map(([movie, credits]) => {
           const cast = credits.cast.slice(0, 5);
@@ -48,28 +71,25 @@ export class MovieTVDetailsComponent implements OnInit {
           return { ...movie, cast };
         })
       )
-      .subscribe(details => {
-        this.details = details;
+      .subscribe(details => this.details = details);
 
-        console.log(details);
-      });
+      /// ASYNC PIPE ///
+      // this.details$ = this.activatedRoute.params
+  }
 
-    // this.details$.subscribe(console.log);
+  ngOnDestroy() {
+    // this.detailsSubscription.unsubscribe();
   }
 
   public detailYear(releaseDate: string) {
     return new Date(releaseDate).getFullYear();
   }
 
-  public get backdropStyle() {
-    if (!!this.details) {
-      return this.sanitizer.bypassSecurityTrustStyle(`--backdrop-image: url('http://image.tmdb.org/t/p/original${ this.details.backdrop_path }')`)
-    }
+  public backdropStyle(backdrop_path: string) {
+    return this.sanitizer.bypassSecurityTrustStyle(`--backdrop-image: url('http://image.tmdb.org/t/p/original${ backdrop_path }')`)
   }
 
-  public get posterUrl() {
-    if (!!this.details) {
-      return `https://image.tmdb.org/t/p/w300_and_h450_bestv2${ this.details.poster_path }`;
-    }
+  public posterUrl(poster_path: string) {
+    return `https://image.tmdb.org/t/p/w300_and_h450_bestv2${ poster_path }`;
   }
 }
